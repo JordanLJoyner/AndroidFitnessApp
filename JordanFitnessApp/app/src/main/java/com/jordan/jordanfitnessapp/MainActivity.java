@@ -13,7 +13,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import java.util.Calendar;
 
 
 /**
@@ -41,7 +40,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button walkReminderButton;
     private TextView currentUserTextView;
     private TextView stepsTodayTextView;
-    private TextView stepsUntilNextMilestoneTextView;
+    private TextView staticsticsForDayTextView;
+    TextView averageStepsPerHourTextView;
+    TextView averageStepsPerMinuteTextView;
     private boolean activityRunning;
     private boolean remindersOn = false;
     private String LOG_TAG = "MainActivity";
@@ -53,14 +54,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        UserInfoManager.UserInfo currentUser = UserInfoManager.getInstance().getActiveUser();
         signoutButton = (Button) findViewById(R.id.signout_button);
         stepsTodayTextView = (TextView) findViewById(R.id.steps_today_textview);
         walkReminderButton = (Button) findViewById(R.id.walk_reminders_button);
         currentUserTextView = (TextView) findViewById(R.id.current_user_textview);
-        stepsUntilNextMilestoneTextView = (TextView) findViewById(R.id.steps_until_mini_goal_textview);
-        currentUserTextView.setText("Current User: " + UserInfoManager.getInstance().getActiveUser().userName);
-        stepsTodayTextView.setText("Steps Today: " + UserInfoManager.getInstance().getActiveUser().numSteps);
-        stepsUntilNextMilestoneTextView.setText("Next Milestone: " + stepCelebrationNumber % UserInfoManager.getInstance().getActiveUser().numSteps + " steps");
+        staticsticsForDayTextView = (TextView) findViewById(R.id.statistics_for_day_textview);
+        averageStepsPerHourTextView = (TextView) findViewById(R.id.average_steps_per_hour_textview);
+        averageStepsPerMinuteTextView = (TextView) findViewById(R.id.average_steps_per_minute_textview);
+
+        currentUserTextView.setText("Current User: " + currentUser.userName);
+        stepsTodayTextView.setText("Steps Today: " + currentUser.numSteps);
+
+        staticsticsForDayTextView.setText("Statistics For Day: " + (Calendar.getInstance().get(Calendar.MONTH)+1) + "/" + Calendar.getInstance().get(Calendar.DATE));
+        updateStatsTextViews();
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     triggeredCelebration = true;
                 }
                 UserInfoManager.getInstance().getActiveUser().numSteps+= stepsToAward;
+                updateStatsTextViews();
             }
             //if the user has surpassed the celebratory number of steps spawn a popup dialogue telling them GOOD JERB
             if(triggeredCelebration){
@@ -197,6 +205,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    private void updateStatsTextViews(){
+        UserInfoManager.UserInfo currentUser = UserInfoManager.getInstance().getActiveUser();
+        String stepsPerHour = String.format("%.2f",  currentUser.numSteps / 24.0f);
+        String stepsPerMinute = String.format("%.2f",(currentUser.numSteps / 24.0f) / 60.0f);
+        averageStepsPerHourTextView.setText("Avg. Steps Per Hour: " + stepsPerHour);
+        averageStepsPerMinuteTextView.setText("Avg. Steps Per Minute: " + stepsPerMinute);
     }
 
     private void logout(){

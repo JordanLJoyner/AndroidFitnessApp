@@ -23,28 +23,34 @@
         android:layout_height="wrap_content"
         android:id="@+id/steps_until_mini_goal_textview"
         android:text="Next Milestone:"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:visibility="invisible"/>
 
     <TextView
-        android:text="Statistics:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4"
+        android:id="@+id/textView"/>
+
+    <TextView
+        android:text="Statistics for day:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/statistics_for_day_textview"
         android:textSize="24sp"/>
 
     <TextView
         android:text="Average Steps Per Minute:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView5"
-        android:textSize="24sp"/>
+        android:id="@+id/average_steps_per_minute_textview"
+        android:textSize="18sp"/>
 
     <TextView
         android:text="Average Steps Per Hour:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView6"
-        android:textSize="24sp"/>
+        android:id="@+id/average_steps_per_hour_textview"
+        android:textSize="18sp"/>
 
     <Button
         android:text="Turn On Walk Reminders"
