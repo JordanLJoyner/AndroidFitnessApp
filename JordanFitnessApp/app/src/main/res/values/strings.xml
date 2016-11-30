@@ -10,4 +10,6 @@
     <string name="wrong_password_error_message">The password provided does not match the provided username</string>
     <string name="empty_username_error_message">Cannot Create an account with a blank username, please enter a username</string>
     <string name="empty_password_error_message">Cannot Create an account with a blank password, please enter a password</string>
+    <string name="notification_title">Get Fit</string>
+    <string name="notification_message">Remember to take an occassional walk</string>
 </resources>
