@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //so we go with bold and noticeable since we have the screen real estate available
     private int notificationId = 0;
     private float lastLoggedStepAmount = -1;
+    private float stepCelebrationNumber = 1000;
     private Button signoutButton;
     private Button walkReminderButton;
     private TextView currentUserTextView;
@@ -56,9 +57,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         stepsTodayTextView = (TextView) findViewById(R.id.steps_today_textview);
         walkReminderButton = (Button) findViewById(R.id.walk_reminders_button);
         currentUserTextView = (TextView) findViewById(R.id.current_user_textview);
-
+        stepsUntilNextMilestoneTextView = (TextView) findViewById(R.id.steps_until_mini_goal_textview);
         currentUserTextView.setText("Current User: " + UserInfoManager.getInstance().getActiveUser().userName);
         stepsTodayTextView.setText("Steps Today: " + UserInfoManager.getInstance().getActiveUser().numSteps);
+        stepsUntilNextMilestoneTextView.setText("Next Milestone: " + stepCelebrationNumber % UserInfoManager.getInstance().getActiveUser().numSteps + " steps");
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,SystemClock.elapsedRealtime() + 1000,AlarmManager.INTERVAL_HOUR,pendingNotificationIntent);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,SystemClock.elapsedRealtime() + AlarmManager.INTERVAL_HOUR,AlarmManager.INTERVAL_HOUR,pendingNotificationIntent);
     }
 
     @Override
@@ -140,12 +142,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if(activityRunning){
             //Increment the numSteps for the active user
             //If we've been asleep and we're just now updating give us credit for all the steps we took in the inbetween
+            boolean triggeredCelebration = false;
             if(lastLoggedStepAmount < 0){
                 lastLoggedStepAmount = event.values[0];
             } else {
                 float stepsToAward = event.values[0] - lastLoggedStepAmount;
                 lastLoggedStepAmount = event.values[0];
+                if(((UserInfoManager.getInstance().getActiveUser().numSteps % stepCelebrationNumber) + stepsToAward) >= stepCelebrationNumber){
+                    triggeredCelebration = true;
+                }
                 UserInfoManager.getInstance().getActiveUser().numSteps+= stepsToAward;
+            }
+            //if the user has surpassed the celebratory number of steps spawn a popup dialogue telling them GOOD JERB
+            if(triggeredCelebration){
+                new AlertDialog.Builder(this)
+                        .setTitle("Congratulations")
+                        .setMessage("Congratulations you just walked " + stepCelebrationNumber + " steps.  Keep up the good work!")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // continue with delete
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
             stepsTodayTextView.setText("Steps Today: " + UserInfoManager.getInstance().getActiveUser().numSteps);
         }
