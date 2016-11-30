@@ -13,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 
 /**
  * Created by Jordan on 11/29/2016.
@@ -31,14 +34,17 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     //I'd like to hide this in a menu, but i'm worried a user might not ultimately find it,
     //so we go with bold and noticeable since we have the screen real estate available
+    private int notificationId = 0;
+    private float lastLoggedStepAmount = -1;
     private Button signoutButton;
     private Button walkReminderButton;
-    private SensorManager sensorManager;
-    private boolean activityRunning;
+    private TextView currentUserTextView;
     private TextView stepsTodayTextView;
+    private TextView stepsUntilNextMilestoneTextView;
+    private boolean activityRunning;
     private boolean remindersOn = false;
-    private int notificationId = 0;
     private String LOG_TAG = "MainActivity";
+    private SensorManager sensorManager;
     private FitnessAppNotificationPublisher notificationPublisher = new FitnessAppNotificationPublisher();
     private PendingIntent pendingNotificationIntent = null;
 
@@ -49,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         signoutButton = (Button) findViewById(R.id.signout_button);
         stepsTodayTextView = (TextView) findViewById(R.id.steps_today_textview);
         walkReminderButton = (Button) findViewById(R.id.walk_reminders_button);
+        currentUserTextView = (TextView) findViewById(R.id.current_user_textview);
+
+        currentUserTextView.setText("Current User: " + UserInfoManager.getInstance().getActiveUser().userName);
+        stepsTodayTextView.setText("Steps Today: " + UserInfoManager.getInstance().getActiveUser().numSteps);
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,13 +131,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause(){
         super.onPause();
         activityRunning = false;
+        UserInfoManager.getInstance().saveUserInfo(this);
     }
 
     //sensormanager reference: https://github.com/theelfismike/android-step-counter/blob/master/src/com/starboardland/pedometer/CounterActivity.java
     @Override
     public void onSensorChanged(SensorEvent event){
         if(activityRunning){
-            stepsTodayTextView.setText(String.valueOf(event.values[0]));
+            //Increment the numSteps for the active user
+            //If we've been asleep and we're just now updating give us credit for all the steps we took in the inbetween
+            if(lastLoggedStepAmount < 0){
+                lastLoggedStepAmount = event.values[0];
+            } else {
+                float stepsToAward = event.values[0] - lastLoggedStepAmount;
+                lastLoggedStepAmount = event.values[0];
+                UserInfoManager.getInstance().getActiveUser().numSteps+= stepsToAward;
+            }
+            stepsTodayTextView.setText("Steps Today: " + UserInfoManager.getInstance().getActiveUser().numSteps);
         }
     }
 
@@ -156,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void logout(){
+        UserInfoManager.getInstance().saveUserInfo(this);
         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
         MainActivity.this.startActivity(loginIntent);
         sensorManager.unregisterListener(this);

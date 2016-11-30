@@ -55,12 +55,13 @@ public class UserInfoManager {
 
                 while ((line = br.readLine()) != null) {
                     String[] infoParts = line.split(",");
-                    if(infoParts.length > 2 || infoParts.length < 0){
-                        Log.e(LOG_TAG,"Save data corrupted, a line from the save data is longer than 2 parts: " + line);
+                    if(infoParts.length > 3 || infoParts.length < 0){
+                        Log.e(LOG_TAG,"Save data corrupted, a line from the save data is longer than 3 parts: " + line);
                     } else {
                         UserInfo newInfo = new UserInfo();
                         newInfo.userName = infoParts[0];
                         newInfo.password = infoParts[1];
+                        newInfo.numSteps = Integer.parseInt(infoParts[2]);
                         loginInfos.add(newInfo);
                     }
                 }
@@ -128,7 +129,7 @@ public class UserInfoManager {
                 return false;
             }
         }
-
+        Log.d(LOG_TAG,"Creating new User account with username: " + newUserName + " and password: " + newPassword);
         //Append the new save data to the list
         UserInfo newInfo = new UserInfo();
         newInfo.userName = newUserName;
@@ -137,14 +138,26 @@ public class UserInfoManager {
         loginInfos.add(newInfo);
         activeUserIndex = loginInfos.size()-1;
 
+        return saveUserInfo(activity);
+    }
+
+    public UserInfo getActiveUser(){
+        if(activeUserIndex > -1 && activeUserIndex < loginInfos.size()){
+            return loginInfos.get(activeUserIndex);
+        }
+        return null;
+    }
+
+    //saves out the current loginInfos
+    //returns true if successful, false if there was an error
+    public boolean saveUserInfo(Activity activity){
         //Save out the new savedata chunk
         FileOutputStream outputStream;
 
         String newSaveData = "";
         for(int i=0 ; i < loginInfos.size();i++){
-            newSaveData += loginInfos.get(i).userName + "," + loginInfos.get(i).password + "\n";
+            newSaveData += loginInfos.get(i).userName + "," + loginInfos.get(i).password + "," + loginInfos.get(i).numSteps + "\n";
         }
-        Log.d(LOG_TAG,"Creating new User account with username: " + newUserName + " and password: " + newPassword);
 
         try {
             outputStream = new FileOutputStream(new File(activity.getFilesDir() + loginFileName));
@@ -157,13 +170,6 @@ public class UserInfoManager {
             return false;
         }
         return true;
-    }
-
-    public UserInfo getActiveUser(){
-        if(activeUserIndex > -1 && activeUserIndex < loginInfos.size()){
-            return loginInfos.get(activeUserIndex);
-        }
-        return null;
     }
 
     //this really belongs in a utility class or file but I don't want to make a whole extra file just for 1 function
