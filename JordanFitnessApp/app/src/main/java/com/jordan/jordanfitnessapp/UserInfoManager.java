@@ -113,6 +113,7 @@ public class UserInfoManager {
                     //Found a match log us in
                     activeUserIndex = i;
                     currentLoginInfo.dateOfLastLogin = Calendar.DAY_OF_YEAR;
+                    currentLoginInfo.dateOfLastLogin = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
                     return true;
                 } else {
                     //if the username matches something but the password doesn't tell the user "wrong password" clear the password field and try again
