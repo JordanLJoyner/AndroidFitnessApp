@@ -23,6 +23,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView currentUserTextView;
     private TextView stepsTodayTextView;
     private TextView staticsticsForDayTextView;
+    private TextView topWalker1Textview;
+    private TextView topWalker2Textview;
+    private TextView topWalker3Textview;
     TextView averageStepsPerHourTextView;
     TextView averageStepsPerMinuteTextView;
     private boolean activityRunning;
@@ -62,12 +68,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         staticsticsForDayTextView = (TextView) findViewById(R.id.statistics_for_day_textview);
         averageStepsPerHourTextView = (TextView) findViewById(R.id.average_steps_per_hour_textview);
         averageStepsPerMinuteTextView = (TextView) findViewById(R.id.average_steps_per_minute_textview);
+        topWalker1Textview = (TextView) findViewById(R.id.top_walker_1_textview);
+        topWalker2Textview = (TextView) findViewById(R.id.top_walker_2_textview);
+        topWalker3Textview = (TextView) findViewById(R.id.top_walker_3_textview);
 
         currentUserTextView.setText("Current User: " + currentUser.userName);
         stepsTodayTextView.setText("Steps Today: " + currentUser.numSteps);
 
         staticsticsForDayTextView.setText("Statistics For Day: " + (Calendar.getInstance().get(Calendar.MONTH)+1) + "/" + Calendar.getInstance().get(Calendar.DATE));
-        updateStatsTextViews();
+        updateStatsAndLeaderboardTextViews();
 
         signoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     triggeredCelebration = true;
                 }
                 UserInfoManager.getInstance().getActiveUser().numSteps+= stepsToAward;
-                updateStatsTextViews();
+                updateStatsAndLeaderboardTextViews();
             }
             //if the user has surpassed the celebratory number of steps spawn a popup dialogue telling them GOOD JERB
             if(triggeredCelebration){
@@ -207,12 +216,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 .show();
     }
 
-    private void updateStatsTextViews(){
+    private void updateStatsAndLeaderboardTextViews(){
         UserInfoManager.UserInfo currentUser = UserInfoManager.getInstance().getActiveUser();
         String stepsPerHour = String.format("%.2f",  currentUser.numSteps / 24.0f);
         String stepsPerMinute = String.format("%.2f",(currentUser.numSteps / 24.0f) / 60.0f);
         averageStepsPerHourTextView.setText("Avg. Steps Per Hour: " + stepsPerHour);
         averageStepsPerMinuteTextView.setText("Avg. Steps Per Minute: " + stepsPerMinute);
+
+        //This becomes less efficient the more users we have but this works for demo purposes
+        ArrayList<UserInfoManager.UserInfo> top3Walkers = UserInfoManager.getInstance().getTop3Walkers();
+        if(top3Walkers.size() > 0){
+            topWalker1Textview.setText("1: " + top3Walkers.get(0).userName + " with " + top3Walkers.get(0).numSteps + " steps");
+        }
+        if(top3Walkers.size() > 1){
+            topWalker2Textview.setText("2: " + top3Walkers.get(1).userName + " with " + top3Walkers.get(1).numSteps + " steps");
+        }
+        if(top3Walkers.size() > 2){
+            topWalker3Textview.setText("3: " + top3Walkers.get(2).userName + " with " + top3Walkers.get(2).numSteps + " steps");
+        }
     }
 
     private void logout(){

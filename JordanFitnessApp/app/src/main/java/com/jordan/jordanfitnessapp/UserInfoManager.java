@@ -12,7 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * Created by Jordan on 11/30/2016.
@@ -112,7 +113,6 @@ public class UserInfoManager {
                 if (newPassword.equals(currentLoginInfo.password)) {
                     //Found a match log us in
                     activeUserIndex = i;
-                    currentLoginInfo.dateOfLastLogin = Calendar.DAY_OF_YEAR;
                     currentLoginInfo.dateOfLastLogin = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
                     return true;
                 } else {
@@ -170,6 +170,31 @@ public class UserInfoManager {
         return null;
     }
 
+    //sorting
+    public class UserInfoComparator implements Comparator<UserInfo>{
+        @Override
+        public int compare(UserInfo a, UserInfo b){
+            if(a.numSteps < b.numSteps){
+                return 1;
+            }
+            if(a.numSteps > b.numSteps){
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    public ArrayList<UserInfo> getTop3Walkers(){
+        Comparator<UserInfo> comparator = new UserInfoComparator();
+        PriorityQueue<UserInfo> sortedWalkers = new PriorityQueue<UserInfo>(loginInfos.size(),comparator);
+        sortedWalkers.addAll(loginInfos);
+        ArrayList<UserInfo> top3 = new ArrayList<UserInfo>();
+        while(sortedWalkers.size() > 0 && top3.size() < 3){
+            top3.add(sortedWalkers.poll());
+        }
+        return top3;
+    }
+
     //saves out the current loginInfos
     //returns true if successful, false if there was an error
     public boolean saveUserInfo(Activity activity){
@@ -185,7 +210,7 @@ public class UserInfoManager {
             outputStream = new FileOutputStream(new File(activity.getFilesDir() + loginFileName));
             outputStream.write(newSaveData.getBytes());
             outputStream.close();
-            Log.d(LOG_TAG,"Successfully wrote out new account");
+            Log.d(LOG_TAG,"Successfully wrote out save data");
         } catch (Exception e) {
             Log.e(LOG_TAG,"Encountered error writing to file while creating new account: " + e.toString());
             e.printStackTrace();

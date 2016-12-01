@@ -52,8 +52,38 @@
         android:id="@+id/average_steps_per_hour_textview"
         android:textSize="18sp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"/>
+
+    <TextView
+        android:text="Top 3 Walkers:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_3_walkers_title_textview"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:text="1:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_walker_1_textview"/>
+
+    <TextView
+        android:text="2:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_walker_2_textview"/>
+
+    <TextView
+        android:text="3:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_walker_3_textview"/>
+
     <Button
-        android:text="Turn On Walk Reminders"
+        android:text="Walk Reminders:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/walk_reminders_button"/>
