@@ -29,6 +29,7 @@ public class UserInfoManager {
         public String userName;
         public String password;
         public int numSteps;
+        public int dateOfLastLogin;
     }
 
     //Singleton Functions
@@ -59,13 +60,27 @@ public class UserInfoManager {
 
                 while ((line = br.readLine()) != null) {
                     String[] infoParts = line.split(",");
-                    if(infoParts.length > 3 || infoParts.length < 0){
-                        Log.e(LOG_TAG,"Save data corrupted, a line from the save data is longer than 3 parts: " + line);
+                    if(infoParts.length != 4){
+                        Log.e(LOG_TAG,"Save data corrupted, a line from the save data is longer than 4 parts: " + line);
+                        //this comes up when changes are made to the saving/loading it's fixed by purging the save data via uninstall
+                            //this should only happen in development so this is more a reminder to dev while updating the save/loading
+                        spawnAlertDialog(activity,"Save data has been corrupted, please uninstall and reinstall the app");
+                        break;
                     } else {
                         UserInfo newInfo = new UserInfo();
                         newInfo.userName = infoParts[0];
                         newInfo.password = infoParts[1];
                         newInfo.numSteps = Integer.parseInt(infoParts[2]);
+                        newInfo.dateOfLastLogin = Integer.parseInt(infoParts[3]);
+
+                        //Reset the number of steps if it's a new day so we can keep our daily totals accurate
+                            //This won't behave right if you're logged in during the swap over from midnight to the new day
+                        int dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+                        if(dayOfYear > newInfo.dateOfLastLogin
+                                || (dayOfYear == 1 && newInfo.dateOfLastLogin != 1)){ //handle the edge case for swapping over from DEC 31 to JAN 1
+                            Log.d(LOG_TAG,"Resetting steps since it's a new day in order to keep our steps accurate");
+                            newInfo.numSteps = 0;
+                        }
                         loginInfos.add(newInfo);
                     }
                 }
@@ -97,6 +112,7 @@ public class UserInfoManager {
                 if (newPassword.equals(currentLoginInfo.password)) {
                     //Found a match log us in
                     activeUserIndex = i;
+                    currentLoginInfo.dateOfLastLogin = Calendar.DAY_OF_YEAR;
                     return true;
                 } else {
                     //if the username matches something but the password doesn't tell the user "wrong password" clear the password field and try again
@@ -139,6 +155,7 @@ public class UserInfoManager {
         newInfo.userName = newUserName;
         newInfo.password = newPassword;
         newInfo.numSteps = 0;
+        newInfo.dateOfLastLogin = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
         loginInfos.add(newInfo);
         activeUserIndex = loginInfos.size()-1;
 
@@ -160,7 +177,7 @@ public class UserInfoManager {
 
         String newSaveData = "";
         for(int i=0 ; i < loginInfos.size();i++){
-            newSaveData += loginInfos.get(i).userName + "," + loginInfos.get(i).password + "," + loginInfos.get(i).numSteps + "\n";
+            newSaveData += loginInfos.get(i).userName + "," + loginInfos.get(i).password + "," + loginInfos.get(i).numSteps + "," + loginInfos.get(i).dateOfLastLogin +"\n";
         }
 
         try {
