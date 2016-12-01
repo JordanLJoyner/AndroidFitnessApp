@@ -11,6 +11,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Jordan on 11/30/2016.
@@ -45,10 +47,12 @@ public class UserInfoManager {
     public void loadLoginInfo(Activity activity){
         //Load in the list of usernames / passwords
         File saveData = new File(activity.getFilesDir().getPath() + loginFileName);
+        //reset in case we log out and come back to the loginActivity;
+        loginInfos.clear();
 
         if(saveData.exists()){
             //read in the save data
-            Log.i(LOG_TAG,"Save data exists, loading it in now");
+            Log.i(LOG_TAG,"Save data exists at, " + saveData.getPath() + " loading it in now");
             try {
                 BufferedReader br = new BufferedReader(new FileReader(saveData));
                 String line;
