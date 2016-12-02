@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:noHistory="true">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </activity>
+        <activity android:name=".LeaderboardActivity"/>
         <receiver
             android:name="com.jordan.jordanfitnessapp.FitnessAppNotificationPublisher">
             <intent-filter>

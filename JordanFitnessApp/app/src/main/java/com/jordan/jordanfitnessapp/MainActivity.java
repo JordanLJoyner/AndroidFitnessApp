@@ -23,8 +23,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,13 +32,12 @@ import java.util.Calendar;
  */
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
-    //I'd like to hide this in a menu, but i'm worried a user might not ultimately find it,
-    //so we go with bold and noticeable since we have the screen real estate available
     private int notificationId = 0;
     private float lastLoggedStepAmount = -1;
     private float stepCelebrationNumber = 1000;
-    private Button signoutButton;
+    private Button signoutButton;//I'd like to hide this in a menu, but i'm worried a user might not ultimately find it,
     private Button walkReminderButton;
+    private Button leaderboardButton;
     private TextView currentUserTextView;
     private TextView stepsTodayTextView;
     private TextView staticsticsForDayTextView;
@@ -61,16 +58,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         UserInfoManager.UserInfo currentUser = UserInfoManager.getInstance().getActiveUser();
-        signoutButton = (Button) findViewById(R.id.signout_button);
-        stepsTodayTextView = (TextView) findViewById(R.id.steps_today_textview);
-        walkReminderButton = (Button) findViewById(R.id.walk_reminders_button);
-        currentUserTextView = (TextView) findViewById(R.id.current_user_textview);
-        staticsticsForDayTextView = (TextView) findViewById(R.id.statistics_for_day_textview);
+        signoutButton               = (Button) findViewById(R.id.signout_button);
+        walkReminderButton          = (Button) findViewById(R.id.walk_reminders_button);
+        leaderboardButton           = (Button) findViewById(R.id.full_leaderboard_button);
+        stepsTodayTextView          = (TextView) findViewById(R.id.steps_today_textview);
+        currentUserTextView         = (TextView) findViewById(R.id.current_user_textview);
+        staticsticsForDayTextView   = (TextView) findViewById(R.id.statistics_for_day_textview);
         averageStepsPerHourTextView = (TextView) findViewById(R.id.average_steps_per_hour_textview);
         averageStepsPerMinuteTextView = (TextView) findViewById(R.id.average_steps_per_minute_textview);
-        topWalker1Textview = (TextView) findViewById(R.id.top_walker_1_textview);
-        topWalker2Textview = (TextView) findViewById(R.id.top_walker_2_textview);
-        topWalker3Textview = (TextView) findViewById(R.id.top_walker_3_textview);
+        topWalker1Textview          = (TextView) findViewById(R.id.top_walker_1_textview);
+        topWalker2Textview          = (TextView) findViewById(R.id.top_walker_2_textview);
+        topWalker3Textview          = (TextView) findViewById(R.id.top_walker_3_textview);
 
         currentUserTextView.setText("Current User: " + currentUser.userName);
         stepsTodayTextView.setText("Steps Today: " + currentUser.numSteps);
@@ -99,11 +97,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent leadboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
+                MainActivity.this.startActivity(leadboardIntent);
+            }
+        });
+
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         walkReminderButton.callOnClick();
     }
 
-    //Notification Scheduling reference: http://stackoverflow.com/questions/36902667/how-to-schedule-notification-in-android
+    //Sets an alarm that triggers notifications to get up and walk to go off every hour
+        //Notification Scheduling reference: http://stackoverflow.com/questions/36902667/how-to-schedule-notification-in-android
     private void scheduleReminderNotification(){
         Log.d(LOG_TAG,"Setting reminder notification to fire off");
         if(pendingNotificationIntent == null) {

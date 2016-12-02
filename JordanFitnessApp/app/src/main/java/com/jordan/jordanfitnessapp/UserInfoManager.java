@@ -185,14 +185,20 @@ public class UserInfoManager {
     }
 
     public ArrayList<UserInfo> getTop3Walkers(){
-        Comparator<UserInfo> comparator = new UserInfoComparator();
-        PriorityQueue<UserInfo> sortedWalkers = new PriorityQueue<UserInfo>(loginInfos.size(),comparator);
-        sortedWalkers.addAll(loginInfos);
+        PriorityQueue<UserInfo> sortedWalkers = getSortedUsers();
         ArrayList<UserInfo> top3 = new ArrayList<UserInfo>();
         while(sortedWalkers.size() > 0 && top3.size() < 3){
             top3.add(sortedWalkers.poll());
         }
         return top3;
+    }
+
+    //Returns a list of all registered users sorted by highest steps
+    public PriorityQueue<UserInfo> getSortedUsers(){
+        Comparator<UserInfo> comparator = new UserInfoComparator();
+        PriorityQueue<UserInfo> sortedWalkers = new PriorityQueue<UserInfo>(loginInfos.size(),comparator);
+        sortedWalkers.addAll(loginInfos);
+        return sortedWalkers;
     }
 
     //saves out the current loginInfos

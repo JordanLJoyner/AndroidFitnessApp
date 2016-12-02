@@ -89,6 +89,12 @@
         android:id="@+id/walk_reminders_button"/>
 
     <Button
+        android:text="Full LeaderBoard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/full_leaderboard_button"/>
+
+    <Button
         android:text="Sign Out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
