@@ -80,7 +80,7 @@
 
                 <EditText
                     android:id="@+id/username_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/editbox_background"
                     android:ems="10"
@@ -106,7 +106,7 @@
 
                 <EditText
                     android:id="@+id/password_edittext"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Password"

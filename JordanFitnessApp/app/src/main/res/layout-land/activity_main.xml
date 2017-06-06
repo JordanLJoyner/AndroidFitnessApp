@@ -15,14 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Current User:"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"/>
+            style="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView
             android:id="@+id/steps_today_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Steps Today:"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"/>
+            style="@android:style/TextAppearance.DeviceDefault.Small"/>
     </LinearLayout>
 
     <LinearLayout
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Statistics for day:"
-            style="@android:style/TextAppearance.DeviceDefault.Medium"/>
+            style="@android:style/TextAppearance.DeviceDefault.Small"/>
 
         <TextView
             android:id="@+id/average_steps_per_hour_textview"
@@ -91,26 +91,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/main_activity_buttons_linear_layout"
         android:layout_weight="2">
 
         <Button
             android:id="@+id/walk_reminders_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Walk Reminders: OFF"/>
 
         <Button
             android:id="@+id/full_leaderboard_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="View LeaderBoard"/>
 
         <Button
             android:id="@+id/signout_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sign Out"/>
     </LinearLayout>
 
