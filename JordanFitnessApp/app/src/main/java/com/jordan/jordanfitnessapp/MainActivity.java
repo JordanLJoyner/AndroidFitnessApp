@@ -11,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.jordan.com.userinfomodule.UserInfoManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.Settings;

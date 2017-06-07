@@ -2,6 +2,7 @@ package com.jordan.jordanfitnessapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.jordan.com.userinfomodule.UserInfoManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Jordan on 11/29/2016.
@@ -67,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 menuModeTitleTextView.setText(getString(R.string.login_activity_create_account_title_text));
             }
         });
-
         UserInfoManager.getInstance().loadLoginInfo(this);
     }
 
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainIntent = new Intent(this, MainActivity.class);
         //mainIntent.putExtra("key", value); //Optional parameters
         this.startActivity(mainIntent);
+        Toast.makeText(this, getString(R.string.successfully_logging_in), Toast.LENGTH_LONG).show();
     }
 
     private void resetFields(){

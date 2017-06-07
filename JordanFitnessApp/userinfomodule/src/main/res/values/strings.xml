@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jordan Fitness App</string>
+    <string name="app_name">UserInfoModule</string>
     <string name="login_activity_login_title_text">Log In</string>
     <string name="login_activity_create_account_title_text">Create Account</string>
     <string name="walk_reminder_on_button_text">Walk Reminder Notification: ON</string>
@@ -12,5 +12,4 @@
     <string name="empty_password_error_message">Cannot Create an account with a blank password, please enter a password</string>
     <string name="notification_title">Get Fit</string>
     <string name="notification_message">Remember to take an occassional walk</string>
-    <string name="successfully_logging_in">Logging in</string>
 </resources>

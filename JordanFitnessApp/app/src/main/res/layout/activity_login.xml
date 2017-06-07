@@ -127,7 +127,7 @@
         android:id="@+id/continue_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Continue"
+        android:text="Log In"
         android:textAlignment="center"
         android:textStyle="normal|bold"
         android:layout_alignParentBottom="true"/>

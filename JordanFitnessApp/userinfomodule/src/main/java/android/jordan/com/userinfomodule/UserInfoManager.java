@@ -1,4 +1,4 @@
-package com.jordan.jordanfitnessapp;
+package android.jordan.com.userinfomodule;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * Created by Jordan on 11/30/2016.
+ * Created by Jordan on 6/6/2017.
  */
 
 public class UserInfoManager {
@@ -44,6 +44,12 @@ public class UserInfoManager {
         return instance;
     }
 
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
+
+    public native String stringFromJNI();
     //Public interface
 
     public void loadLoginInfo(Activity activity){
@@ -64,7 +70,7 @@ public class UserInfoManager {
                     if(infoParts.length != 4){
                         Log.e(LOG_TAG,"Save data corrupted, a line from the save data is longer than 4 parts: " + line);
                         //this comes up when changes are made to the saving/loading it's fixed by purging the save data via uninstall
-                            //this should only happen in development so this is more a reminder to dev while updating the save/loading
+                        //this should only happen in development so this is more a reminder to dev while updating the save/loading
                         spawnAlertDialog(activity,"Save data has been corrupted, please uninstall and reinstall the app");
                         break;
                     } else {
@@ -75,7 +81,7 @@ public class UserInfoManager {
                         newInfo.dateOfLastLogin = Integer.parseInt(infoParts[3]);
 
                         //Reset the number of steps if it's a new day so we can keep our daily totals accurate
-                            //This won't behave right if you're logged in during the swap over from midnight to the new day
+                        //This won't behave right if you're logged in during the swap over from midnight to the new day
                         int dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
                         if(dayOfYear > newInfo.dateOfLastLogin
                                 || (dayOfYear == 1 && newInfo.dateOfLastLogin != 1)){ //handle the edge case for swapping over from DEC 31 to JAN 1
@@ -171,7 +177,7 @@ public class UserInfoManager {
     }
 
     //sorting
-    public class UserInfoComparator implements Comparator<UserInfo>{
+    public class UserInfoComparator implements Comparator<UserInfo> {
         @Override
         public int compare(UserInfo a, UserInfo b){
             if(a.numSteps < b.numSteps){
@@ -242,5 +248,7 @@ public class UserInfoManager {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+
+
     }
 }
