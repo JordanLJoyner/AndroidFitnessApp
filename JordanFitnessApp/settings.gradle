@@ -1,1 +1,1 @@
-include ':app', ':userinfomodule'
+include ':app', ':userinfomodule', ':openglmodule'

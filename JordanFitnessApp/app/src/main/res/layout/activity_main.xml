@@ -106,12 +106,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="View LeaderBoard"/>
-
+        <Button
+            android:id="@+id/start_gl_activity_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open GL"/>
         <Button
             android:id="@+id/signout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Out"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

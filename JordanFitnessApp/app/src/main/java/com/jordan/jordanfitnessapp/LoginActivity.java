@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to quit the application?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        System.exit(1);
+                        System.exit(0);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

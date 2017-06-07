@@ -100,14 +100,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Walk Reminders: OFF"/>
+            android:maxLines="1"
+            android:text="Reminders: OFF"/>
 
         <Button
             android:id="@+id/full_leaderboard_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="View LeaderBoard"/>
+            android:maxLines="1"
+            android:text="LeaderBoard"/>
+
+        <Button
+            android:id="@+id/start_gl_activity_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Open GL"/>
 
         <Button
             android:id="@+id/signout_button"
@@ -115,6 +124,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Sign Out"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

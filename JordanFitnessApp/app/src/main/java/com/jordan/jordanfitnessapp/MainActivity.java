@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button signoutButton;//I'd like to hide this in a menu, but i'm worried a user might not ultimately find it,
     private Button walkReminderButton;
     private Button leaderboardButton;
+    private Button openGLButton;
     private TextView currentUserTextView;
     private TextView stepsTodayTextView;
     private TextView staticsticsForDayTextView;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         signoutButton               = (Button) findViewById(R.id.signout_button);
         walkReminderButton          = (Button) findViewById(R.id.walk_reminders_button);
         leaderboardButton           = (Button) findViewById(R.id.full_leaderboard_button);
+        openGLButton                = (Button) findViewById(R.id.start_gl_activity_button);
         stepsTodayTextView          = (TextView) findViewById(R.id.steps_today_textview);
         currentUserTextView         = (TextView) findViewById(R.id.current_user_textview);
         staticsticsForDayTextView   = (TextView) findViewById(R.id.statistics_for_day_textview);
@@ -103,6 +105,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View view) {
                 Intent leadboardIntent = new Intent(MainActivity.this, LeaderboardActivity.class);
                 MainActivity.this.startActivity(leadboardIntent);
+            }
+        });
+
+        openGLButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent openGLIntent = new Intent(MainActivity.this, OpenGLActivity.class);
+                MainActivity.this.startActivity(openGLIntent);
             }
         });
 

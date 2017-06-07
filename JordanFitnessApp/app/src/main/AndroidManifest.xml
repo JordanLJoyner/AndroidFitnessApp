@@ -29,6 +29,10 @@
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".OpenGLActivity">
+        </activity>
     </application>
     <uses-permission android:name="android.permission.VIBRATE"/>
 </manifest>
