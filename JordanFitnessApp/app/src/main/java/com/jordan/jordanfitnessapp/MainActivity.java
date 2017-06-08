@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button walkReminderButton;
     private Button leaderboardButton;
     private Button openGLButton;
+    private Button nativeToastButton;
     private TextView currentUserTextView;
     private TextView stepsTodayTextView;
     private TextView staticsticsForDayTextView;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private FitnessAppNotificationPublisher notificationPublisher = new FitnessAppNotificationPublisher();
     private PendingIntent pendingNotificationIntent = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         topWalker1Textview          = (TextView) findViewById(R.id.top_walker_1_textview);
         topWalker2Textview          = (TextView) findViewById(R.id.top_walker_2_textview);
         topWalker3Textview          = (TextView) findViewById(R.id.top_walker_3_textview);
+        nativeToastButton           = (Button) findViewById(R.id.native_toast_button);
 
         currentUserTextView.setText("Current User: " + currentUser.userName);
         stepsTodayTextView.setText("Steps Today: " + currentUser.numSteps);
@@ -118,6 +122,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         walkReminderButton.callOnClick();
+
+        nativeToastButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doJNIToastExample();
+            }
+        });
     }
 
     //Sets an alarm that triggers notifications to get up and walk to go off every hour
@@ -257,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void logout(){
         UserInfoManager.getInstance().saveUserInfo(this);
         Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         MainActivity.this.startActivity(loginIntent);
         sensorManager.unregisterListener(this);
     }
@@ -266,5 +278,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mNotificationManager.cancel(notificationId);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingNotificationIntent);
+    }
+
+    static {
+        System.loadLibrary("toastexample");
+    }
+    public native void doJNIToastExample();
+    public void invokeToast(String toastText){
+        if(toastText.length() == 0){
+            toastText = "empty";
+        }
+        Toast.makeText(this,toastText,Toast.LENGTH_LONG).show();
     }
 }

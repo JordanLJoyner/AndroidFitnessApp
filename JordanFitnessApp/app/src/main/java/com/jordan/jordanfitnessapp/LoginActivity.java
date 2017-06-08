@@ -99,8 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG,"Credentials correct, logging in user");
         Intent mainIntent = new Intent(this, MainActivity.class);
         //mainIntent.putExtra("key", value); //Optional parameters
-        this.startActivity(mainIntent);
         Toast.makeText(this, getString(R.string.successfully_logging_in), Toast.LENGTH_LONG).show();
+        this.startActivity(mainIntent);
     }
 
     private void resetFields(){

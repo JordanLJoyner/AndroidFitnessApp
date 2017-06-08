@@ -2,8 +2,8 @@
     <string name="app_name">Jordan Fitness App</string>
     <string name="login_activity_login_title_text">Log In</string>
     <string name="login_activity_create_account_title_text">Create Account</string>
-    <string name="walk_reminder_on_button_text">Walk Reminder Notification: ON</string>
-    <string name="walk_reminder_off_button_text">Walk Reminder Notification: OFF</string>
+    <string name="walk_reminder_on_button_text">Disable Walk Reminder</string>
+    <string name="walk_reminder_off_button_text">Enable Walk Reminder</string>
     <string name="count_sensor_unavailable_error_message">Count sensor, not available!</string>
     <string name="error_loading_savedata_message">An issue occured while loading username/password data: </string>
     <string name="wrong_username_error_message">The provided username does not match any username in our records, please try again</string>

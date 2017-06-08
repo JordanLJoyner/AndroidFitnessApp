@@ -100,17 +100,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLines="1"
-            android:text="Reminders: OFF"/>
+            android:maxLines="2"
+            android:textSize="10dp"
+            android:text="@string/walk_reminder_off_button_text"/>
 
         <Button
             android:id="@+id/full_leaderboard_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="10dp"
             android:maxLines="1"
             android:text="LeaderBoard"/>
-
+        <Button
+            android:id="@+id/native_toast_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:text="Native Toast"/>
         <Button
             android:id="@+id/start_gl_activity_button"
             android:layout_width="0dp"

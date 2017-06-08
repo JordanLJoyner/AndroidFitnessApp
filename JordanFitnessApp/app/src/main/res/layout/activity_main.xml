@@ -99,7 +99,7 @@
             android:id="@+id/walk_reminders_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Walk Reminders: OFF"/>
+            android:text="@string/walk_reminder_off_button_text"/>
 
         <Button
             android:id="@+id/full_leaderboard_button"
@@ -111,6 +111,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Open GL"/>
+        <Button
+            android:id="@+id/native_toast_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Native Toast"/>
         <Button
             android:id="@+id/signout_button"
             android:layout_width="match_parent"

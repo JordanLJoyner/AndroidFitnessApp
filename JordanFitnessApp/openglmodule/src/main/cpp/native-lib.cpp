@@ -22,9 +22,11 @@ const char gVertexShader[] =
 
 const char gFragmentShader[] =
         "precision mediump float;\n"
+                "uniform vec4 uColor;"
                 "void main() {\n"
-                "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+                "  gl_FragColor = uColor;\n"
                 "}\n";
+//"  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
 
 #define  LOG_TAG    "libgl2jni"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -136,12 +138,7 @@ const GLfloat gTriangleVertices[] = { 0.0f, 0.5f, -0.5f, -0.5f,
                                       0.5f, -0.5f };
 
 void renderFrame() {
-    static float grey;
-    //grey += 0.01f;
-    //if (grey > 1.0f) {
-    //    grey = 0.0f;
-    //}
-    glClearColor(grey, grey, grey, 1.0f);
+    glClearColor(0, 0, 0, 1.0f);
     checkGlError("glClearColor");
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     checkGlError("glClear");
@@ -168,11 +165,17 @@ JNIEXPORT jstring JNICALL Java_android_jordan_com_openglmodule_OpenGLRenderer_st
 
 JNIEXPORT void JNICALL Java_android_jordan_com_openglmodule_OpenGLRenderer_init(JNIEnv * env, jobject obj,  jint width, jint height)
 {
-    setupGraphics(width, height);
+    bool setupResult = setupGraphics(width, height);
 }
 
+const GLfloat redColor[] = { 1.0f, 0.0f, 0.0f, 1.0f };
 JNIEXPORT void JNICALL Java_android_jordan_com_openglmodule_OpenGLRenderer_step(JNIEnv * env, jobject obj)
 {
+    GLint loc = glGetUniformLocation(gProgram, "uColor");
+    if (loc != -1)
+    {
+        glUniform4f(loc, redColor[0],redColor[1],redColor[2],redColor[3]);
+    }
     renderFrame();
 }
 
